@@ -21,7 +21,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 if (process.env.NODE_ENV === 'production') {
-    const frontendPath = path.join(process.cwd(), 'Frontend', 'dist')
+    const frontendPath = path.join(process.cwd(), '..', 'Frontend', 'dist')
     console.log("Frontend path:", frontendPath)
 
     app.use(express.static(frontendPath))
