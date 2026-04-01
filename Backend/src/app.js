@@ -14,22 +14,24 @@ app.use(cors({
     credentials: true
 }))
 
-/* routes */
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
-/* serve frontend in production */
 if (process.env.NODE_ENV === 'production') {
-    // __dirname is Backend/src, so go up twice to reach root, then Frontend/dist
     const frontendPath = path.join(__dirname, '..', '..', 'Frontend', 'dist')
+    console.log("Frontend path:", frontendPath)  // ← debug log
     
     app.use(express.static(frontendPath))
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(frontendPath, 'index.html'))
+    app.get('*', (req, res, next) => {       // ← add next parameter
+        const indexPath = path.join(frontendPath, 'index.html')
+        console.log("Serving index from:", indexPath)  // ← debug log
+        res.sendFile(indexPath, (err) => {
+            if (err) next(err)               // ← handle error properly
+        })
     })
 }
 
