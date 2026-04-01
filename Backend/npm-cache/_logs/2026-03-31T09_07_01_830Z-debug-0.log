@@ -1,0 +1,23 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.0
+2 info using node@v22.12.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\Jignesh\Coding\Web development course\AI for Growth\interview-ai\Backend\.npmrc
+5 silly config load:file:C:\Users\Makwana's Com\.npmrc
+6 silly config load:file:C:\Users\Makwana's Com\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm exec nodemon server.js
+8 verbose argv "exec" "--" "nodemon" "server.js"
+9 verbose logfile logs-max:10 dir:D:\Jignesh\Coding\Web development course\AI for Growth\interview-ai\Backend\npm-cache\_logs\2026-03-31T09_07_01_830Z-
+10 verbose logfile D:\Jignesh\Coding\Web development course\AI for Growth\interview-ai\Backend\npm-cache\_logs\2026-03-31T09_07_01_830Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+13 http fetch GET 200 https://registry.npmjs.org/nodemon 199ms (cache revalidated)
+14 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+15 verbose Could not read global path C:\Users\Makwana's Com\AppData\Roaming\npm, ignoring
+16 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+17 verbose cwd D:\Jignesh\Coding\Web development course\AI for Growth\interview-ai\Backend
+18 verbose os Windows_NT 10.0.19045
+19 verbose node v22.12.0
+20 verbose npm  v10.9.0
+21 verbose exit 3221225786
+22 verbose code 3221225786
