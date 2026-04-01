@@ -2,16 +2,17 @@ const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const path = require("path")
+const fs = require("fs")
 
 const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
 
-// CORS: Allow same origin in prod (no CORS needed), localhost in dev
+// CORS setup
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
-        ? undefined  // Same origin, no CORS headers needed
+        ? undefined
         : "http://localhost:5173",
     credentials: true
 }))
@@ -19,32 +20,29 @@ app.use(cors({
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-// API routes FIRST
+// API routes FIRST (before static files)
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 // Production: serve frontend
 if (process.env.NODE_ENV === 'production') {
-    // Try multiple path strategies for Render
+    // Find frontend dist folder
     let frontendPath = path.join(process.cwd(), '..', 'Frontend', 'dist')
     
-    // Fallback: try same level (if both in root)
-    if (!require('fs').existsSync(frontendPath)) {
+    if (!fs.existsSync(frontendPath)) {
         frontendPath = path.join(process.cwd(), 'Frontend', 'dist')
     }
-    // Another fallback: if backend is in subdirectory
-    if (!require('fs').existsSync(frontendPath)) {
+    if (!fs.existsSync(frontendPath)) {
         frontendPath = path.join(process.cwd(), 'dist')
     }
     
     console.log("Frontend path:", frontendPath)
-    console.log("Exists:", require('fs').existsSync(frontendPath))
+    console.log("Exists:", fs.existsSync(frontendPath))
 
     app.use(express.static(frontendPath))
 
-    // Express 4 compatible wildcard (works on Render)
+    // ✅ Express 4 compatible wildcard
     app.get('*', (req, res) => {
-        // Don't serve index.html for API 404s
         if (req.url.startsWith('/api')) {
             return res.status(404).json({ error: 'API route not found' })
         }
@@ -52,4 +50,4 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-module.exports = app  // ✅ Fixed: separate line
+module.exports = app
