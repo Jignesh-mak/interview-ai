@@ -21,13 +21,13 @@ app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 if (process.env.NODE_ENV === 'production') {
-    // process.cwd() = /opt/render/project/src (the repo root on Render)
     const frontendPath = path.join(process.cwd(), 'Frontend', 'dist')
     console.log("Frontend path:", frontendPath)
 
     app.use(express.static(frontendPath))
 
-    app.get('*', (req, res) => {
+    // Express 5 wildcard syntax
+    app.get('/{*splat}', (req, res) => {
         res.sendFile(path.join(frontendPath, 'index.html'))
     })
 }
