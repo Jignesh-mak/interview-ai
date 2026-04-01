@@ -9,10 +9,10 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
-// CORS
+// ✅ Fixed CORS: Allow same-origin in production (no origin header needed)
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? undefined
+    origin: process.env.NODE_ENV === 'production' 
+        ? true  // Reflects the request origin, needed for credentials
         : "http://localhost:5173",
     credentials: true
 }))
@@ -20,33 +20,27 @@ app.use(cors({
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-// API routes FIRST
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
-// Production: serve frontend
 if (process.env.NODE_ENV === 'production') {
     let frontendPath = path.join(process.cwd(), '..', 'Frontend', 'dist')
     
     if (!fs.existsSync(frontendPath)) {
         frontendPath = path.join(process.cwd(), 'Frontend', 'dist')
     }
-    if (!fs.existsSync(frontendPath)) {
-        frontendPath = path.join(process.cwd(), 'dist')
-    }
     
     console.log("Frontend path:", frontendPath)
-    console.log("Exists:", fs.existsSync(frontendPath))
 
     app.use(express.static(frontendPath))
 
-    app.use((req, res, next) => {
-    if (req.url.startsWith('/api')) {
-        return res.status(404).json({ error: 'Not found' })
-    }
-    // For all non-API routes, send index.html
-    res.sendFile(path.join(frontendPath, 'index.html'))
-})
+    // ✅ Fixed: Use regex instead of Express 5 syntax
+    app.get(/.*/, (req, res) => {
+        if (req.url.startsWith('/api')) {
+            return res.status(404).json({ error: 'Not found' })
+        }
+        res.sendFile(path.join(frontendPath, 'index.html'))
+    })
 }
 
-module.exports = app
+module.exports = app  // ✅ Fixed: proper export
