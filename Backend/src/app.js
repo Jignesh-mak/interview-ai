@@ -21,17 +21,14 @@ app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 if (process.env.NODE_ENV === 'production') {
-    const frontendPath = path.join(__dirname, '..', '..', 'Frontend', 'dist')
-    console.log("Frontend path:", frontendPath)  // ← debug log
-    
+    // process.cwd() = /opt/render/project/src (the repo root on Render)
+    const frontendPath = path.join(process.cwd(), 'Frontend', 'dist')
+    console.log("Frontend path:", frontendPath)
+
     app.use(express.static(frontendPath))
 
-    app.get('*', (req, res, next) => {       // ← add next parameter
-        const indexPath = path.join(frontendPath, 'index.html')
-        console.log("Serving index from:", indexPath)  // ← debug log
-        res.sendFile(indexPath, (err) => {
-            if (err) next(err)               // ← handle error properly
-        })
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(frontendPath, 'index.html'))
     })
 }
 
