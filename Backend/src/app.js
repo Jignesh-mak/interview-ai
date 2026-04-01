@@ -40,13 +40,13 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(frontendPath))
 
-    // ✅ Regex catch-all (compatible with all Express/path-to-regexp versions)
-    app.get(/.*/, (req, res) => {
-        if (req.url.startsWith('/api')) {
-            return res.status(404).json({ error: 'API route not found' })
-        }
-        res.sendFile(path.join(frontendPath, 'index.html'))
-    })
+    app.use((req, res, next) => {
+    if (req.url.startsWith('/api')) {
+        return res.status(404).json({ error: 'Not found' })
+    }
+    // For all non-API routes, send index.html
+    res.sendFile(path.join(frontendPath, 'index.html'))
+})
 }
 
 module.exports = app
