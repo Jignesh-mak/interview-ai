@@ -8,8 +8,8 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? false                        // same origin in production, no need for CORS
+    origin: process.env.NODE_ENV === 'production'
+        ? false
         : "http://localhost:5173",
     credentials: true
 }))
@@ -23,10 +23,13 @@ app.use("/api/interview", interviewRouter)
 
 /* serve frontend in production */
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../Frontend/dist')))
+    // __dirname is Backend/src, so go up twice to reach root, then Frontend/dist
+    const frontendPath = path.join(__dirname, '..', '..', 'Frontend', 'dist')
+    
+    app.use(express.static(frontendPath))
 
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../../Frontend/dist', 'index.html'))
+        res.sendFile(path.join(frontendPath, 'index.html'))
     })
 }
 
