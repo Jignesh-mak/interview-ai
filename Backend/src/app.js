@@ -9,7 +9,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
-// CORS setup
+// CORS
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
         ? undefined
@@ -20,13 +20,12 @@ app.use(cors({
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
 
-// API routes FIRST (before static files)
+// API routes FIRST
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 // Production: serve frontend
 if (process.env.NODE_ENV === 'production') {
-    // Find frontend dist folder
     let frontendPath = path.join(process.cwd(), '..', 'Frontend', 'dist')
     
     if (!fs.existsSync(frontendPath)) {
@@ -41,8 +40,8 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(frontendPath))
 
-    // ✅ Express 4 compatible wildcard
-    app.get('*', (req, res) => {
+    // ✅ Regex catch-all (compatible with all Express/path-to-regexp versions)
+    app.get(/.*/, (req, res) => {
         if (req.url.startsWith('/api')) {
             return res.status(404).json({ error: 'API route not found' })
         }
