@@ -90,7 +90,7 @@ async function generateResumePdfController(req, res) {
 
     const interviewReport = await interviewReportModel.findById(interviewReportId)
 
-    if (!interviewReport) {f
+    if (!interviewReport) {
         return res.status(404).json({
             message: "Interview report not found."
         })
@@ -98,7 +98,11 @@ async function generateResumePdfController(req, res) {
 
     const { resume, jobDescription, selfDescription } = interviewReport
 
-    const pdfBuffer = await generateResumePdf({ resume, jobDescription, selfDescription })
+    const pdfBuffer = await generateResumePdf({ 
+        resume: resume || selfDescription || "", // ← fallback if resume is empty
+        jobDescription, 
+        selfDescription 
+    })
 
     res.set({
         "Content-Type": "application/pdf",
@@ -107,5 +111,4 @@ async function generateResumePdfController(req, res) {
 
     res.send(pdfBuffer)
 }
-
 module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }
