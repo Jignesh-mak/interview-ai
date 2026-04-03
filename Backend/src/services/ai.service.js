@@ -61,10 +61,17 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
         The content should not sound AI-generated.
     `
 
-    const response = await callOpenRouter([{ role: "user", content: prompt }])
-    const content = response.data.choices[0].message.content
-    const jsonContent = JSON.parse(content)
-    return await generatePdfFromHtml(jsonContent.html)
+    try {
+        const response = await callOpenRouter([{ role: "user", content: prompt }])
+        const content = response.data.choices[0].message.content
+        const jsonContent = JSON.parse(content)
+        return await generatePdfFromHtml(jsonContent.html)
+    } catch (error) {
+        // Log the full OpenRouter error response
+        console.error("OpenRouter error status:", error.response?.status)
+        console.error("OpenRouter error data:", JSON.stringify(error.response?.data))
+        throw error
+    }
 }
 
 module.exports = { generateInterviewReport, generateResumePdf }
