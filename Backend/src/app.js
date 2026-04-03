@@ -34,6 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(frontendPath))
 
+    
     app.use((req, res, next) => {
         if (req.url.startsWith('/api')) {
             return next()
