@@ -59,6 +59,7 @@ export const useInterview = () => {
     }
 
     const getResumePdf = async (interviewReportId) => {
+        console.log("Downloading resume for ID:", interviewReportId)
         setLoading(true)
         let response = null
         try {
