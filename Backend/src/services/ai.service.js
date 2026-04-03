@@ -3,13 +3,15 @@ const puppeteer = require("puppeteer")
 
 function callOpenRouter(messages) {
     return axios.post("https://openrouter.ai/api/v1/chat/completions", {
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        model: "mistralai/mistral-7b-instruct:free",
         messages,
         response_format: { type: "json_object" }
     }, {
         headers: {
             Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://interview-ai-2jf6.onrender.com",
+            "X-Title": "Interview AI"
         }
     })
 }
