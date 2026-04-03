@@ -34,10 +34,9 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(frontendPath))
 
-    // ✅ Fixed: Use regex instead of Express 5 syntax
-    app.get(/.*/, (req, res) => {
+    app.use((req, res, next) => {
         if (req.url.startsWith('/api')) {
-            return res.status(404).json({ error: 'Not found' })
+            return next()
         }
         res.sendFile(path.join(frontendPath, 'index.html'))
     })
