@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer")
 
 function callOpenRouter(messages) {
     return axios.post("https://openrouter.ai/api/v1/chat/completions", {
-        model: "qwen/qwen3.6-plus:free",
+        model: "openai/gpt-4o-mini",
         messages,
         response_format: { type: "json_object" }
     }, {
